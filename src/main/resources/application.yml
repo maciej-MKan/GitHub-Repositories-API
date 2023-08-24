@@ -1,0 +1,8 @@
+server:
+  port: 8089
+  servlet:
+    context-path: /github_aggregate
+
+api:
+  GitHub:
+    url: https://api.github.com/
