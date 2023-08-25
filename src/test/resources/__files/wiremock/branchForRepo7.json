@@ -1,0 +1,26 @@
+[
+  {
+    "name": "dev",
+    "commit": {
+      "sha": "9003b0d419086b3d316e97ddd8cdd62cd7a23c33",
+      "url": "https://api.github.com/repos/maciej-MKan/projects-manager/commits/9003b0d419086b3d316e97ddd8cdd62cd7a23c33"
+    },
+    "protected": false
+  },
+  {
+    "name": "frontend",
+    "commit": {
+      "sha": "dde85e2603564d53fb9f577bec0b15212627661d",
+      "url": "https://api.github.com/repos/maciej-MKan/projects-manager/commits/dde85e2603564d53fb9f577bec0b15212627661d"
+    },
+    "protected": false
+  },
+  {
+    "name": "main",
+    "commit": {
+      "sha": "8fbc5a137ddc15b48682ff136291e5014424869b",
+      "url": "https://api.github.com/repos/maciej-MKan/projects-manager/commits/8fbc5a137ddc15b48682ff136291e5014424869b"
+    },
+    "protected": false
+  }
+]

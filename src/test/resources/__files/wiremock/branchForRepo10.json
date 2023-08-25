@@ -1,0 +1,34 @@
+[
+  {
+    "name": "feature/db",
+    "commit": {
+      "sha": "3dd0b0b63417896688c24cf221d726747abddfda",
+      "url": "https://api.github.com/repos/maciej-MKan/Pycamp-auto-email-sender/commits/3dd0b0b63417896688c24cf221d726747abddfda"
+    },
+    "protected": false
+  },
+  {
+    "name": "feature/email",
+    "commit": {
+      "sha": "c41c21aac3151b5a106e935f5089721f34e012df",
+      "url": "https://api.github.com/repos/maciej-MKan/Pycamp-auto-email-sender/commits/c41c21aac3151b5a106e935f5089721f34e012df"
+    },
+    "protected": false
+  },
+  {
+    "name": "feature/reminder",
+    "commit": {
+      "sha": "357e064c6c4bcdbd10fb1b2896e12db16298a7c0",
+      "url": "https://api.github.com/repos/maciej-MKan/Pycamp-auto-email-sender/commits/357e064c6c4bcdbd10fb1b2896e12db16298a7c0"
+    },
+    "protected": false
+  },
+  {
+    "name": "main",
+    "commit": {
+      "sha": "ff18f709d2a14b5c6b04bb91bb187dd2b9ffee03",
+      "url": "https://api.github.com/repos/maciej-MKan/Pycamp-auto-email-sender/commits/ff18f709d2a14b5c6b04bb91bb187dd2b9ffee03"
+    },
+    "protected": false
+  }
+]

@@ -12,7 +12,7 @@ public interface GHControllerTestSupport {
     default OwnerRepoBranchesDTO getUsersReposAndBranches(final OwnerDTO ownerDTO){
         return requestSpecification()
                 .body(ownerDTO)
-                .get(GHController.API_PATH)
+                .get(GHController.API_PATH + "/")
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .and()

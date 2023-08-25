@@ -1,30 +1,39 @@
 package com.mkan.infrastructure.GitHub.api;
 
 import com.mkan.business.dao.RepoDAO;
-import com.mkan.domain.Owner;
 import com.mkan.domain.Repo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
 @AllArgsConstructor
-public class RepoApi implements RepoDAO {
+public class RepoApi
+//        extends AbstractGHAPI
+        implements RepoDAO {
+//    public RepoApi(WebClient webClient) {
+//        super(webClient);
+//    }
 
     private static final String GH_REPOS = "users/{owner_login}/repos";
     private final WebClient webClient;
 
     @Override
-    public Optional<Repo> getRepoByOwner(Owner owner){
+    public List<Repo> findReposByOwnerLogin(String login) {
+        return getRepoByOwnerLogin(login).orElseThrow();
+    }
+
+    private Optional<List<Repo>> getRepoByOwnerLogin(String login) {
         try {
-            Repo result = webClient
-                    .get()
-                    .uri(GH_REPOS, owner.getLogin())
+            List<Repo> result = webClient.get().uri(GH_REPOS, login)
                     .retrieve()
-                    .bodyToMono(Repo.class)
+                    .bodyToFlux(Repo.class)
+                    .collectList()
                     .block();
+
             return Optional.ofNullable(result);
         } catch (Exception e) {
             return Optional.empty();

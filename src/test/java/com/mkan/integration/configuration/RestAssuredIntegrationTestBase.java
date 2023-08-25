@@ -12,8 +12,10 @@ import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpHeaders;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
@@ -23,6 +25,7 @@ public abstract class RestAssuredIntegrationTestBase
     protected static WireMockServer wireMockServer;
     @Autowired
     protected ObjectMapper objectMapper;
+
     @LocalServerPort
     private int serverPort;
 
@@ -35,6 +38,15 @@ public abstract class RestAssuredIntegrationTestBase
         );
         wireMockServer.start();
     }
+//    @BeforeEach
+//    void beforeEach() {
+//        jSessionIdValue = login("test_user", "test")
+//                .and()
+//                .cookie("JSESSIONID")
+//                .header(HttpHeaders.LOCATION, "http://localhost:%s%s/".formatted(port, basePath))
+//                .extract()
+//                .cookie("JSESSIONID");
+//    }
 
     @AfterAll
     static void afterAll() {
