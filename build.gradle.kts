@@ -22,6 +22,8 @@ repositories {
 }
 
 extra["springCloudVersion"] = "2022.0.4"
+extra["wiremockVersion"] = "2.35.0"
+extra["restAssuredVersion"] = "5.3.1"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-rest")
@@ -34,6 +36,8 @@ dependencies {
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
 	testImplementation("org.testcontainers:junit-jupiter")
+	testImplementation("com.github.tomakehurst:wiremock-jre8:${property("wiremockVersion")}")
+	testImplementation("io.rest-assured:rest-assured:${property("restAssuredVersion")}")
 }
 
 dependencyManagement {
