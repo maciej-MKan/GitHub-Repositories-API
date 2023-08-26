@@ -25,14 +25,17 @@ extra["springCloudVersion"] = "2022.0.4"
 extra["wiremockVersion"] = "2.27.2"
 extra["restAssuredVersion"] = "5.3.0"
 extra["wiremockSlf4jVersion"] = "2.0.5"
-extra["mapstructVersion"]= "1.5.3.Final"
-extra["lombokMapstructBindingVersion"]= "0.2.0"
+extra["mapstructVersion"] = "1.5.3.Final"
+extra["lombokMapstructBindingVersion"] = "0.2.0"
+extra["jsr305Version"] = "3.0.2"
 
 dependencies {
 	//spring
 	implementation("org.springframework.boot:spring-boot-starter-data-rest")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
+
 
 	//annotationProcesor
 	compileOnly("org.projectlombok:lombok")
@@ -40,6 +43,10 @@ dependencies {
 	implementation ("org.mapstruct:mapstruct:${property("mapstructVersion")}")
 	annotationProcessor ("org.mapstruct:mapstruct-processor:${property("mapstructVersion")}")
 	annotationProcessor ("org.projectlombok:lombok-mapstruct-binding:${property("lombokMapstructBindingVersion")}")
+
+	// warning: unknown enum constant When.MAYBE
+	// reason: class file for javax.annotation.meta.When not found
+	implementation("com.google.code.findbugs:jsr305:${property("jsr305Version")}")
 
 	//test
 	testCompileOnly("org.projectlombok:lombok")

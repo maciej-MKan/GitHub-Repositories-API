@@ -14,6 +14,5 @@ public class Repo {
     String name;
     Boolean fork;
     List<Branch> branches;
-    String default_branch;
 
 }

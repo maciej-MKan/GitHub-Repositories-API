@@ -18,12 +18,12 @@ public interface RepoMapper {
 
     @Mapping(target = "branches", qualifiedByName = "branchesListMapper")
     RepoDTO map(Repo repo);
+
     Repo map(RepoDTO repo);
 
     @Named("branchesListMapper")
-    default List<BranchDTO> branchesListMapper(List<Branch> branches){
+    default List<BranchDTO> branchesListMapper(List<Branch> branches) {
         return branches.stream().map(branchesMapper::map).toList();
     }
-
 
 }

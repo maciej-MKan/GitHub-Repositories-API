@@ -3,6 +3,7 @@ package com.mkan.api.controller.rest;
 import com.mkan.api.dto.OwnerDTO;
 import com.mkan.api.dto.OwnerRepoBranchesDTO;
 import com.mkan.business.GHService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class GHController {
     private final GHService ghService;
 
     @GetMapping(value = "/")
-    public ResponseEntity<OwnerRepoBranchesDTO> reposAndBranches(@RequestBody OwnerDTO ownerDTO) {
+    public ResponseEntity<OwnerRepoBranchesDTO> reposAndBranches(@RequestBody @Valid OwnerDTO ownerDTO) {
         log.info("Handled [{}] in body", ownerDTO);
 
         OwnerRepoBranchesDTO response = ghService.findOwnerReposAndBranches(ownerDTO);

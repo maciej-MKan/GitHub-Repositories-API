@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface BranchDAO {
 
-    List<Branch> findBranchesByRepoName(String name, String mainBranchName);
+    List<Branch> findBranchesByRepoName(String name);
 }

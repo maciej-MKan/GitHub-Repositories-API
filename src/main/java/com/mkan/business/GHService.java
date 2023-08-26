@@ -2,7 +2,6 @@ package com.mkan.business;
 
 import com.mkan.api.dto.OwnerDTO;
 import com.mkan.api.dto.OwnerRepoBranchesDTO;
-import com.mkan.api.dto.mapper.BranchMapper;
 import com.mkan.api.dto.mapper.OwnerMapper;
 import com.mkan.api.dto.mapper.RepoMapper;
 import com.mkan.business.dao.BranchDAO;
@@ -25,32 +24,34 @@ public class GHService {
     private final RepoDAO repoDAO;
     private final BranchDAO branchDAO;
     private final OwnerMapper ownerMapper;
-    private final BranchMapper branchMapper;
     private final RepoMapper repoMapper;
 
     @Transactional
     public OwnerRepoBranchesDTO findOwnerReposAndBranches(OwnerDTO ownerDTO) {
 
         List<Repo> repos = getOwnerRepos(ownerMapper.map(ownerDTO)).stream()
+                .peek(repo -> log.info("Found repo [{}]", repo))
                 .filter(repo -> !repo.getFork())
-                .map(repo -> Repo.builder()
-                        .name(repo.getName())
-                        .fork(false)
-                        .default_branch(repo.getDefault_branch())
-                        .branches(getReposBranches(repo))
-                        .build())
                 .toList();
+        log.info("Founded repos after drop forks [{}]", repos);
+        List<Repo> reposWithBranches = repos.stream().map(repo -> repo.withBranches(getReposBranches(repo))).toList();
+        log.info("Founded repos with branches [{}]", reposWithBranches);
 
-        return OwnerRepoBranchesDTO.builder().ownersRepos(repos.stream().map(repoMapper::map).toList()).build();
+        return getOwnerRepoBranchesDTO(reposWithBranches, ownerDTO.getLogin());
+    }
+
+    private OwnerRepoBranchesDTO getOwnerRepoBranchesDTO(List<Repo> repos, String login) {
+        return OwnerRepoBranchesDTO.builder().login(login).repositories(repos.stream()
+                        .map(repoMapper::map)
+                        .toList())
+                .build();
     }
 
     private List<Branch> getReposBranches(Repo repo) {
-        List<Branch> branchesByRepoName = branchDAO.findBranchesByRepoName(repo.getName(), repo.getDefault_branch());
-        return branchesByRepoName;
+        return branchDAO.findBranchesByRepoName(repo.getName());
     }
 
     private List<Repo> getOwnerRepos(Owner owner) {
-
         return repoDAO.findReposByOwnerLogin(owner.getLogin());
     }
 }

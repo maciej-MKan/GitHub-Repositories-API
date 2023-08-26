@@ -37,8 +37,27 @@ public interface WiremockTestSupport {
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
                         .withBodyFile("wiremock/branchFor%s.json".formatted(fileName))
-//                        .withTransformerParameters(Map.of("login", ownerLogin))
                         .withTransformers("response-template")
                 )));
+    }
+
+    default void stubForIncorrectUser(final WireMockServer wireMockServer, final String ownerLogin) {
+        wireMockServer.stubFor(get(urlPathEqualTo("/users/%s/repos".formatted(ownerLogin)))
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withStatus(404)
+                        .withBodyFile("wiremock/notFoundUser.json")
+                        .withTransformers("response-template")
+                ));
+    }
+
+    default void stubForForbiddenAccess(final WireMockServer wireMockServer, final String ownerLogin) {
+        wireMockServer.stubFor(get(urlPathEqualTo("/users/%s/repos".formatted(ownerLogin)))
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withStatus(403)
+                        .withBodyFile("wiremock/notFoundUser.json")
+                        .withTransformers("response-template")
+                ));
     }
 }

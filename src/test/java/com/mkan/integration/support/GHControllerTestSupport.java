@@ -3,15 +3,18 @@ package com.mkan.integration.support;
 import com.mkan.api.controller.rest.GHController;
 import com.mkan.api.dto.OwnerDTO;
 import com.mkan.api.dto.OwnerRepoBranchesDTO;
+import io.restassured.http.ContentType;
+import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import org.springframework.http.HttpStatus;
 
 public interface GHControllerTestSupport {
 
     RequestSpecification requestSpecification();
-    default OwnerRepoBranchesDTO getUsersReposAndBranches(final OwnerDTO ownerDTO){
+    default OwnerRepoBranchesDTO getUsersReposAndBranchesCorrectly(final OwnerDTO ownerDTO){
         return requestSpecification()
                 .body(ownerDTO)
+                .accept("application/json")
                 .get(GHController.API_PATH + "/")
                 .then()
                 .statusCode(HttpStatus.OK.value())
@@ -19,4 +22,38 @@ public interface GHControllerTestSupport {
                 .extract()
                 .as(OwnerRepoBranchesDTO.class);
     }
+
+    default ValidatableResponse getWithIncorrectAccept(final OwnerDTO ownerDTO){
+        return requestSpecification()
+                .body(ownerDTO)
+                .accept("application/xml")
+                .get(GHController.API_PATH + "/")
+                .then()
+                .statusCode(HttpStatus.NOT_ACCEPTABLE.value())
+                .contentType(ContentType.JSON)
+                .and();
+    }
+
+    default ValidatableResponse getWithIncorrectLogin(final OwnerDTO ownerDTO){
+        return requestSpecification()
+                .body(ownerDTO)
+                .accept("application/json")
+                .get(GHController.API_PATH + "/")
+                .then()
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .contentType(ContentType.JSON)
+                .and();
+    }
+
+    default ValidatableResponse getWithAccessForbidden(final OwnerDTO ownerDTO){
+        return requestSpecification()
+                .body(ownerDTO)
+                .accept("application/json")
+                .get(GHController.API_PATH + "/")
+                .then()
+                .statusCode(HttpStatus.FORBIDDEN.value())
+                .contentType(ContentType.JSON)
+                .and();
+    }
+
 }

@@ -13,5 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class OwnerRepoBranchesDTO {
 
-    private List<RepoDTO> ownersRepos;
+    private String login;
+    private List<RepoDTO> repositories;
 }

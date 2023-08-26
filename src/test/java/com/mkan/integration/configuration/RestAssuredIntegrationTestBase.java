@@ -38,15 +38,6 @@ public abstract class RestAssuredIntegrationTestBase
         );
         wireMockServer.start();
     }
-//    @BeforeEach
-//    void beforeEach() {
-//        jSessionIdValue = login("test_user", "test")
-//                .and()
-//                .cookie("JSESSIONID")
-//                .header(HttpHeaders.LOCATION, "http://localhost:%s%s/".formatted(port, basePath))
-//                .extract()
-//                .cookie("JSESSIONID");
-//    }
 
     @AfterAll
     static void afterAll() {
@@ -69,6 +60,7 @@ public abstract class RestAssuredIntegrationTestBase
                 .config(getConfig())
                 .port(serverPort)
                 .accept(ContentType.JSON)
+                .accept(ContentType.XML)
                 .contentType(ContentType.JSON);
     }
 
