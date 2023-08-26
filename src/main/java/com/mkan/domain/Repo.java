@@ -13,7 +13,7 @@ public class Repo {
 
     String name;
     Boolean fork;
-    List<Branch> Branches;
+    List<Branch> branches;
     String default_branch;
 
 }

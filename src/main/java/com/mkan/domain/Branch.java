@@ -2,6 +2,8 @@ package com.mkan.domain;
 
 import lombok.*;
 
+import java.util.Map;
+
 @With
 @Value
 @Builder
@@ -10,6 +12,5 @@ import lombok.*;
 public class Branch {
 
     String name;
-    String sha;
-
+    Commit commit;
 }

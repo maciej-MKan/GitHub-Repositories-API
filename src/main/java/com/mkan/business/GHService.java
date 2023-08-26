@@ -1,9 +1,7 @@
 package com.mkan.business;
 
-import com.mkan.api.dto.BranchDTO;
 import com.mkan.api.dto.OwnerDTO;
 import com.mkan.api.dto.OwnerRepoBranchesDTO;
-import com.mkan.api.dto.RepoDTO;
 import com.mkan.api.dto.mapper.BranchMapper;
 import com.mkan.api.dto.mapper.OwnerMapper;
 import com.mkan.api.dto.mapper.RepoMapper;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -40,7 +37,7 @@ public class GHService {
                         .name(repo.getName())
                         .fork(false)
                         .default_branch(repo.getDefault_branch())
-                        .Branches(getReposBranches(repo))
+                        .branches(getReposBranches(repo))
                         .build())
                 .toList();
 

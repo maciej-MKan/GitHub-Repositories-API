@@ -11,12 +11,7 @@ import java.util.Optional;
 
 @Component
 @AllArgsConstructor
-public class RepoApi
-//        extends AbstractGHAPI
-        implements RepoDAO {
-//    public RepoApi(WebClient webClient) {
-//        super(webClient);
-//    }
+public class RepoApi implements RepoDAO {
 
     private static final String GH_REPOS = "users/{owner_login}/repos";
     private final WebClient webClient;
@@ -29,8 +24,7 @@ public class RepoApi
     private Optional<List<Repo>> getRepoByOwnerLogin(String login) {
         try {
             List<Repo> result = webClient.get().uri(GH_REPOS, login)
-                    .retrieve()
-                    .bodyToFlux(Repo.class)
+                    .retrieve().bodyToFlux(Repo.class)
                     .collectList()
                     .block();
 

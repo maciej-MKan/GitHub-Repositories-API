@@ -12,16 +12,11 @@ import java.util.Optional;
 
 @Component
 @AllArgsConstructor
-public class BranchApi
-//        extends AbstractGHAPI
-        implements BranchDAO {
+public class BranchApi implements BranchDAO {
 
     private static final String GH_BRANCHES = "repos/maciej-MKan/{repo_name}/branches";
     private final WebClient webClient;
 
-//    public BranchApi(WebClient webClient) {
-//        super(webClient);
-//    }
 
     @Override
     public List<Branch> findBranchesByRepoName(String name, String mainBranchName) {
