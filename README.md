@@ -11,6 +11,7 @@ This project provides a RESTful API that interacts with the GitHub API to list r
 - Lombok
 - WireMock
 - Rest Assured
+- JUnit
 
 ## Requirements
 
