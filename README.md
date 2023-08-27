@@ -1,4 +1,4 @@
-# GitHub Repository API
+# GitHub Repository API 
 
 This project provides a RESTful API that interacts with the GitHub API to list repositories and their branches for a given user. It's designed to fulfill various requirements related to GitHub repository information retrieval.
 
@@ -12,6 +12,7 @@ This project provides a RESTful API that interacts with the GitHub API to list r
 - WireMock
 - Rest Assured
 - JUnit
+- Jacoco
 
 ## Requirements
 
