@@ -36,13 +36,9 @@ public class BranchApi implements BranchDAO {
             log.info("Handle response from APi correctly for branch [{}]", name);
 
             return Optional.of(result);
-        } catch (NoSuchElementException e) {
-            log.error("Handle response from APi incorrect for [{}] cause [{}]", name, e.getMessage());
-            return Optional.empty();
         } catch (Exception e) {
             log.error("Handle response from APi incorrect for [{}] cause [{}]", name, e.getMessage());
-            throw new NoSuchElementException(e);
+            return Optional.empty();
         }
-
     }
 }

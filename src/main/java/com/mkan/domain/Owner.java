@@ -2,10 +2,8 @@ package com.mkan.domain;
 
 import lombok.*;
 
-@Value
+@Getter
 @Builder
-@EqualsAndHashCode(of = "login")
-@ToString(of = {"login"})
 public class Owner {
 
     String login;

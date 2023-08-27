@@ -2,10 +2,8 @@ package com.mkan.domain;
 
 import lombok.*;
 
-@Value
+@Getter
 @Builder
-@EqualsAndHashCode(of = "sha")
-@ToString(of = {"sha"})
 public class Commit {
     String sha;
     String url;

@@ -1,12 +1,9 @@
 package com.mkan.api.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 import org.springframework.http.HttpStatusCode;
 
-@Value
-@Builder
+@Getter
 @AllArgsConstructor(staticName = "of")
 public class ExceptionMessage {
 
