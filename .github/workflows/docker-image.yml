@@ -2,9 +2,10 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main", "docker" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: [ "docker" ]
+
+permissions:
+  contents: read
 
 jobs:
 
@@ -14,6 +15,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Change wrapper permissions
+      run: chmod +x ./gradlew
     - name: build .jar
       run: ./gradlew build
     - name: Build the Docker image
