@@ -14,5 +14,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: build .jar
+      run: ./gradlew build
     - name: Build the Docker image
       run: docker build . --file Dockerfile
