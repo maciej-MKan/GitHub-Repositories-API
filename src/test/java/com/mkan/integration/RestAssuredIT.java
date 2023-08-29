@@ -1,5 +1,6 @@
 package com.mkan.integration;
 
+import com.mkan.GhApiAggregateApplication;
 import com.mkan.api.dto.OwnerDTO;
 import com.mkan.api.dto.OwnerRepoBranchesDTO;
 import com.mkan.api.dto.RepoDTO;
@@ -7,6 +8,8 @@ import com.mkan.integration.configuration.RestAssuredIntegrationTestBase;
 import com.mkan.integration.support.GHControllerTestSupport;
 import com.mkan.integration.support.WiremockTestSupport;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
@@ -14,7 +17,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
-public class GHControllerIT
+@ActiveProfiles("test")
+@SpringBootTest(
+        classes = {GhApiAggregateApplication.class},
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class RestAssuredIT
         extends RestAssuredIntegrationTestBase
         implements WiremockTestSupport, GHControllerTestSupport {
 

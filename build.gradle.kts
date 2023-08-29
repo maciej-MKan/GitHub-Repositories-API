@@ -16,7 +16,6 @@ extra["mapstructVersion"] = "1.5.3.Final"
 extra["lombokMapstructBindingVersion"] = "0.2.0"
 extra["jsr305Version"] = "3.0.2"
 extra["jacocoVersion"] = "0.8.9"
-extra["springDocOpenApiVersion"] = "2.0.0"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -42,7 +41,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${property("springDocOpenApiVersion")}")
 
 
     //annotationProcesor

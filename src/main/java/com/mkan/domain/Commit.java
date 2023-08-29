@@ -4,7 +4,7 @@ import lombok.*;
 
 @Getter
 @Builder
-public class Commit {
+public final class Commit {
     String sha;
     String url;
 }

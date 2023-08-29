@@ -20,7 +20,6 @@ import org.springframework.http.HttpHeaders;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
 public abstract class RestAssuredIntegrationTestBase
-        extends AbstractIntegrationTest
         implements ControllerTestSupport {
     protected static WireMockServer wireMockServer;
     @Autowired

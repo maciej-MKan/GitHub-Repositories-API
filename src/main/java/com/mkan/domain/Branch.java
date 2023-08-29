@@ -6,7 +6,7 @@ import java.util.Map;
 
 @Getter
 @Builder
-public class Branch {
+public final class Branch {
     String name;
     Commit commit;
 }

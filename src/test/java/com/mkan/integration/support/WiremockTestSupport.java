@@ -25,7 +25,7 @@ public interface WiremockTestSupport {
         wireMockServer.stubFor(get(urlPathEqualTo("/users/%s/repos".formatted(ownerLogin)))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
-                        .withBodyFile("wiremock/reposByOwnerLogin.json")
+                        .withBodyFile("stub/reposByOwnerLogin.json")
                         .withTransformerParameters(Map.of("login", ownerLogin))
                         .withTransformers("response-template")
                 ));
@@ -36,7 +36,7 @@ public interface WiremockTestSupport {
         wireMockServer.stubFor(get(urlPathEqualTo("/repos/maciej-MKan/%s/branches".formatted(repoName)))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
-                        .withBodyFile("wiremock/branchFor%s.json".formatted(fileName))
+                        .withBodyFile("stub/branchFor%s.json".formatted(fileName))
                         .withTransformers("response-template")
                 )));
     }
@@ -46,7 +46,7 @@ public interface WiremockTestSupport {
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
                         .withStatus(404)
-                        .withBodyFile("wiremock/notFoundUser.json")
+                        .withBodyFile("stub/notFoundUser.json")
                         .withTransformers("response-template")
                 ));
     }
@@ -56,7 +56,7 @@ public interface WiremockTestSupport {
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
                         .withStatus(403)
-                        .withBodyFile("wiremock/notFoundUser.json")
+                        .withBodyFile("stub/notFoundUser.json")
                         .withTransformers("response-template")
                 ));
     }
