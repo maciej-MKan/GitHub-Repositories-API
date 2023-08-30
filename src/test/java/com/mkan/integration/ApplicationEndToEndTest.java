@@ -2,12 +2,10 @@ package com.mkan.integration;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
-import com.mkan.api.dto.OwnerDTO;
-import com.mkan.api.dto.OwnerRepoBranchesDTO;
-import com.mkan.api.dto.RepoDTO;
-import com.mkan.integration.support.WiremockTestSupport;
+import com.mkan.controller.dto.OwnerDTO;
+import com.mkan.controller.dto.OwnerRepoBranchesDTO;
+import com.mkan.business.model.Repo;
 import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -20,20 +18,18 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
-import static com.mkan.api.controller.rest.GHController.API_PATH;
+import static com.mkan.controller.rest.GHController.API_PATH;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
-public class WebTestClientIT implements WiremockTestSupport {
+public class ApplicationEndToEndTest implements WiremockStubs {
 
     private static WebTestClient.RequestBodySpec requestBodySpec;
     private static WireMockServer wireMockServer;
     @LocalServerPort
     private int port;
-    @Value("${api.GitHub.url}")
-    private String apiPath;
 
     @BeforeAll
     static void beforeAll() {
@@ -67,10 +63,10 @@ public class WebTestClientIT implements WiremockTestSupport {
     }
 
     @Test
-    void thatFindingUsersReposCorrectly() {
+    void thatFindsUsersReposCorrectly() {
         //given
         String login = "test";
-        OwnerDTO someOwner = OwnerDTO.builder().login(login).build();
+        OwnerDTO someOwner = new OwnerDTO(login);
         stubForRepos(wireMockServer, login);
         stubForBranches(wireMockServer, login);
 
@@ -84,21 +80,21 @@ public class WebTestClientIT implements WiremockTestSupport {
                 .returnResult();
 
         //then
-        List<RepoDTO> ownersRepos = Objects.requireNonNull(expected.getResponseBody()).getRepositories();
+        List<Repo> ownersRepos = Objects.requireNonNull(expected.getResponseBody()).repositories();
 
         assertThat(ownersRepos).hasSize(10);
 
-        ownersRepos.forEach(repoDTO -> assertThat(repoDTO.getBranches()).isNotEmpty());
-        ownersRepos.forEach(repoDTO -> repoDTO.getBranches()
-                .forEach(branchDTO -> assertThat(branchDTO.getSha()).isNotEmpty()));
+        ownersRepos.forEach(repo -> assertThat(repo.branches()).isNotEmpty());
+        ownersRepos.forEach(repo -> repo.branches()
+                .forEach(branch -> assertThat(branch.commit().sha()).isNotEmpty()));
 
     }
 
     @Test
-    void thatReturnNotAcceptableMessage() {
+    void thatReturnsNotAcceptableMessage() {
         //given
         String login = "test";
-        OwnerDTO someOwner = OwnerDTO.builder().login(login).build();
+        OwnerDTO someOwner = new OwnerDTO(login);
         stubForRepos(wireMockServer, login);
         stubForBranches(wireMockServer, login);
 
@@ -117,10 +113,10 @@ public class WebTestClientIT implements WiremockTestSupport {
     }
 
     @Test
-    void thatReturnUserNotFoundMessage() {
+    void thatReturnsUserNotFoundMessage() {
         //given
         String login = "incorrect";
-        OwnerDTO someOwner = OwnerDTO.builder().login(login).build();
+        OwnerDTO someOwner = new OwnerDTO(login);
         stubForIncorrectUser(wireMockServer, login);
         stubForBranches(wireMockServer, login);
 
@@ -138,10 +134,10 @@ public class WebTestClientIT implements WiremockTestSupport {
                 .jsonPath("message").isNotEmpty();
     }
     @Test
-    void thatReturnForbiddenMessage() {
+    void thatReturnsForbiddenMessage() {
         //given
         String login = "incorrect";
-        OwnerDTO someOwner = OwnerDTO.builder().login(login).build();
+        OwnerDTO someOwner = new OwnerDTO(login);
         stubForForbiddenAccess(wireMockServer, login);
         stubForBranches(wireMockServer, login);
 
@@ -150,12 +146,12 @@ public class WebTestClientIT implements WiremockTestSupport {
                 .accept(MediaType.APPLICATION_XML)
                 .bodyValue(someOwner)
                 .exchange()
-                .expectStatus().is4xxClientError()
+                .expectStatus().is5xxServerError()
                 .expectBody();
 
         //then
         expected
-                .jsonPath("status").isEqualTo(403)
+                .jsonPath("status").isEqualTo(500)
                 .jsonPath("message").isNotEmpty();
     }
 }

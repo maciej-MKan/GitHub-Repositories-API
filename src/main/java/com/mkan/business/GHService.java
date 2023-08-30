@@ -1,57 +1,61 @@
 package com.mkan.business;
 
-import com.mkan.api.dto.OwnerDTO;
-import com.mkan.api.dto.OwnerRepoBranchesDTO;
-import com.mkan.api.dto.mapper.OwnerMapper;
-import com.mkan.api.dto.mapper.RepoMapper;
-import com.mkan.business.dao.BranchDAO;
-import com.mkan.business.dao.RepoDAO;
-import com.mkan.domain.Branch;
-import com.mkan.domain.Owner;
-import com.mkan.domain.Repo;
-import lombok.AllArgsConstructor;
+import com.mkan.controller.dto.OwnerDTO;
+import com.mkan.controller.dto.OwnerRepoBranchesDTO;
+import com.mkan.business.exception.UserNotFoundException;
+import com.mkan.business.model.Branch;
+import com.mkan.business.model.Repo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 @Slf4j
 @Service
-@AllArgsConstructor
 public class GHService {
 
-    private final RepoDAO repoDAO;
-    private final BranchDAO branchDAO;
-    private final OwnerMapper ownerMapper;
-    private final RepoMapper repoMapper;
+    private final WebClient.Builder webClientbuilder;
 
-    @Transactional
+    public GHService(WebClient.Builder webClientbuilder) {
+        this.webClientbuilder = webClientbuilder;
+    }
+
     public OwnerRepoBranchesDTO findOwnerReposAndBranches(OwnerDTO ownerDTO) {
 
-        List<Repo> repos = getOwnerRepos(ownerMapper.map(ownerDTO)).stream()
-                .peek(repo -> log.info("Found repo [{}]", repo))
-                .filter(repo -> !repo.getFork())
-                .toList();
-        log.info("Founded repos after drop forks [{}]", repos);
-        List<Repo> reposWithBranches = repos.stream().map(repo -> repo.withBranches(getReposBranches(repo))).toList();
-        log.info("Founded repos with branches [{}]", reposWithBranches);
+        String ownerLogin = ownerDTO.login();
 
-        return getOwnerRepoBranchesDTO(reposWithBranches, ownerDTO.getLogin());
+        WebClient webClient = webClientbuilder.build();
+
+        List<Repo> repositories = webClient.get()
+                .uri("/users/{login}/repos", ownerLogin)
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError,
+                        clientResponse -> clientResponse.statusCode().equals(HttpStatus.NOT_FOUND) ?
+                                clientResponse.bodyToMono(UserNotFoundException.class) :
+                                clientResponse.createException()
+                )
+                .bodyToFlux(Repo.class)
+                .filter(repo -> !repo.fork())
+                .flatMap(repo -> getBranches(ownerLogin, repo.name())
+                        .map(branches -> new Repo(repo.name(), repo.fork(), branches)))
+                .collectList()
+                .block();
+
+        return new OwnerRepoBranchesDTO(ownerDTO.login(), repositories);
     }
 
-    private OwnerRepoBranchesDTO getOwnerRepoBranchesDTO(List<Repo> repos, String login) {
-        return OwnerRepoBranchesDTO.builder().login(login).repositories(repos.stream()
-                        .map(repoMapper::map)
-                        .toList())
-                .build();
-    }
+    private Mono<List<Branch>> getBranches(String ownerLogin, String repoName) {
 
-    private List<Branch> getReposBranches(Repo repo) {
-        return branchDAO.findBranchesByRepoName(repo.getName());
-    }
+        WebClient webClient = webClientbuilder.build();
 
-    private List<Repo> getOwnerRepos(Owner owner) {
-        return repoDAO.findReposByOwnerLogin(owner.getLogin());
+        return webClient.get()
+                .uri("/repos/{owner}/{repo}/branches", ownerLogin, repoName)
+                .retrieve()
+                .bodyToFlux(Branch.class)
+                .collectList();
     }
 }

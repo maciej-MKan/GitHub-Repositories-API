@@ -1,11 +1,11 @@
-package com.mkan.integration.support;
+package com.mkan.integration;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import java.util.Map;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
-public interface WiremockTestSupport {
+public interface WiremockStubs {
 
     Map<String, String> BRANCHES_NAMES = Map.of(
             "Browser_Calculator_Django" , "Repo1",
@@ -33,7 +33,7 @@ public interface WiremockTestSupport {
 
     default void stubForBranches(final WireMockServer wireMockServer, final String ownerLogin){
         BRANCHES_NAMES.forEach((repoName, fileName) ->
-        wireMockServer.stubFor(get(urlPathEqualTo("/repos/maciej-MKan/%s/branches".formatted(repoName)))
+        wireMockServer.stubFor(get(urlPathEqualTo("/repos/%s/%s/branches".formatted(ownerLogin, repoName)))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
                         .withBodyFile("stub/branchFor%s.json".formatted(fileName))

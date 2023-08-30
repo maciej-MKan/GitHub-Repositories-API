@@ -1,17 +1,13 @@
-package com.mkan.api.controller;
+package com.mkan.controller;
 
-import com.mkan.domain.exception.AccessForbiddenException;
-import com.mkan.domain.exception.UserNotFoundException;
+import com.mkan.controller.dto.ExceptionMessage;
+import com.mkan.business.exception.UserNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -20,11 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import com.mkan.api.dto.ExceptionMessage;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Slf4j
 @RestControllerAdvice(annotations = RestController.class)
@@ -36,7 +30,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             DataIntegrityViolationException.class, HttpStatus.BAD_REQUEST,
             UserNotFoundException.class, HttpStatus.NOT_FOUND,
             HttpMediaTypeNotAcceptableException.class, HttpStatus.NOT_ACCEPTABLE,
-            AccessForbiddenException.class, HttpStatus.FORBIDDEN
+            RuntimeException.class, HttpStatus.INTERNAL_SERVER_ERROR
     );
 
     @Override
@@ -47,23 +41,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             @NonNull HttpStatusCode statusCode,
             @NonNull WebRequest request
     ) {
-        final String errorId = UUID.randomUUID().toString();
-        log.error("Exception: ID={}, HttpStatus={}", errorId, statusCode, exception);
+        log.error("Exception: {}, HttpStatus={}", exception, statusCode);
         return super.handleExceptionInternal(
                 exception,
-                ExceptionMessage.of(statusCode.value(), exception.getMessage()),
+                new ExceptionMessage(statusCode.value(), exception.getMessage()),
                 headers, statusCode, request);
     }
     @Override
     protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(
             @NonNull HttpMediaTypeNotAcceptableException ex,
             @NonNull HttpHeaders headers,
-            @NonNull HttpStatusCode status,
+            @NonNull HttpStatusCode statusCode,
             @NonNull WebRequest request
     ) {
         headers.put(HttpHeaders.CONTENT_TYPE, List.of("application/json"));
+        log.error("Media type {} not acceptable, HttpStatus={}", headers.getAccept(), statusCode);
         return handleExceptionInternal(ex,
-                ExceptionMessage.of(status.value(), "Requested media type is not supported"),
+                new ExceptionMessage(statusCode.value(), "Requested media type is not supported"),
                 headers, HttpStatus.NOT_ACCEPTABLE, request);
     }
 
@@ -73,13 +67,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private ResponseEntity<Object> doHandle(final Exception exception, final HttpStatus status) {
-        final String errorId = UUID.randomUUID().toString();
-        log.error("Exception: ID={}, HttpStatus={}", errorId, status, exception);
+        log.error("Exception: {}, HttpStatus={}", exception, status);
 
         return ResponseEntity
                 .status(status)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(ExceptionMessage.of(status.value(), exception.getMessage()));
+                .body(new ExceptionMessage(status.value(), exception.getMessage()));
     }
 
     public HttpStatus getHttpStatusFromException(final Class<?> exception) {

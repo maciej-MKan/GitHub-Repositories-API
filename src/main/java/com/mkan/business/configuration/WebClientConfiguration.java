@@ -1,4 +1,4 @@
-package com.mkan.infrastructure.configuration;
+package com.mkan.business.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.ChannelOption;
@@ -26,7 +26,7 @@ public class WebClientConfiguration {
     private String gitHubUrl;
 
     @Bean
-    public WebClient webClient(ObjectMapper objectMapper) {
+    public WebClient.Builder webClientbuilder(ObjectMapper objectMapper) {
 
         final var httpClient = HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, TIMEOUT)
@@ -50,7 +50,6 @@ public class WebClientConfiguration {
         return WebClient.builder()
                 .baseUrl(gitHubUrl)
                 .exchangeStrategies(strategies)
-                .clientConnector(new ReactorClientHttpConnector(httpClient))
-                .build();
+                .clientConnector(new ReactorClientHttpConnector(httpClient));
     }
 }
