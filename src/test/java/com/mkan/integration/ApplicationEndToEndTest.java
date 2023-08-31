@@ -132,25 +132,25 @@ public class ApplicationEndToEndTest implements WiremockStubs {
                 .jsonPath("status").isEqualTo(404)
                 .jsonPath("message").isNotEmpty();
     }
+
     @Test
-    void thatReturnsForbiddenMessage() {
+    void thatReturnsEmptyRepositoriesForOwnerLoginCorrectly() {
         //given
-        String login = "incorrect";
+        String login = "test";
         OwnerDTO someOwner = new OwnerDTO(login);
-        stubForForbiddenAccess(wireMockServer, login);
-        stubForBranches(wireMockServer, login);
+        stubForEmptyReposList(wireMockServer, login);
 
         //when
         WebTestClient.BodyContentSpec expected = requestBodySpec
-                .accept(MediaType.APPLICATION_XML)
+                .accept(MediaType.APPLICATION_JSON)
                 .bodyValue(someOwner)
                 .exchange()
-                .expectStatus().is5xxServerError()
+                .expectStatus().isOk()
                 .expectBody();
 
         //then
         expected
-                .jsonPath("status").isEqualTo(500)
-                .jsonPath("message").isNotEmpty();
+                .jsonPath("login").isEqualTo(login)
+                .jsonPath("repositories").isEmpty();
     }
 }
