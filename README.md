@@ -62,8 +62,8 @@ This endpoint allows you to retrieve a list of repositories owned by a GitHub us
                     "sha": "commit_sha"
                 }
             ]
-        },
-        // ... (other repositories and branches)
+        }
+     ... 
     ]
 }
 ```
