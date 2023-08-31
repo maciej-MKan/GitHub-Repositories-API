@@ -8,10 +8,9 @@ This project provides a RESTful API that interacts with the GitHub API to list r
 - Spring Boot 3
 - WebClient & WebTestClient
 - WireMock
-- MapStruct
+- Jacoco
 - Lombok
 - JUnit
-- Jacoco
 
 ## Requirements
 
