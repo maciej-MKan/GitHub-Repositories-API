@@ -29,7 +29,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             ConstraintViolationException.class, HttpStatus.BAD_REQUEST,
             DataIntegrityViolationException.class, HttpStatus.BAD_REQUEST,
             UserNotFoundException.class, HttpStatus.NOT_FOUND,
-            HttpMediaTypeNotAcceptableException.class, HttpStatus.NOT_ACCEPTABLE,
             RuntimeException.class, HttpStatus.INTERNAL_SERVER_ERROR
     );
 
@@ -55,7 +54,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             @NonNull WebRequest request
     ) {
         headers.put(HttpHeaders.CONTENT_TYPE, List.of("application/json"));
-        log.error("Media type {} not acceptable, HttpStatus={}", headers.getAccept(), statusCode);
+        log.error("Media type {} not acceptable, HttpStatus={}", request.getHeader(HttpHeaders.ACCEPT), statusCode);
         return handleExceptionInternal(ex,
                 new ExceptionMessage(statusCode.value(), "Requested media type is not supported"),
                 headers, HttpStatus.NOT_ACCEPTABLE, request);

@@ -4,7 +4,6 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import com.mkan.controller.dto.OwnerDTO;
 import com.mkan.controller.dto.OwnerRepoBranchesDTO;
-import com.mkan.model.Repo;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -80,13 +79,13 @@ public class ApplicationEndToEndTest implements WiremockStubs {
                 .returnResult();
 
         //then
-        List<Repo> ownersRepos = Objects.requireNonNull(expected.getResponseBody()).repositories();
+        List<OwnerRepoBranchesDTO.RepoDTO> ownersRepos = Objects.requireNonNull(expected.getResponseBody()).repositories();
 
         assertThat(ownersRepos).hasSize(10);
 
         ownersRepos.forEach(repo -> assertThat(repo.branches()).isNotEmpty());
         ownersRepos.forEach(repo -> repo.branches()
-                .forEach(branch -> assertThat(branch.commit().sha()).isNotEmpty()));
+                .forEach(branch -> assertThat(branch.sha()).isNotEmpty()));
 
     }
 
