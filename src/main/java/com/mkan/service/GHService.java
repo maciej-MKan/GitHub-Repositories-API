@@ -41,7 +41,7 @@ public class GHService {
                 .bodyToFlux(Repo.class)
                 .filter(repo -> !repo.fork())
                 .flatMap(repo -> getBranches(ownerLogin, repo.name())
-                        .map(branches -> new Repo(repo.name(), repo.fork(), branches)))
+                        .map(branches -> new Repo(repo.name(),null, branches)))
                 .collectList()
                 .block();
 
