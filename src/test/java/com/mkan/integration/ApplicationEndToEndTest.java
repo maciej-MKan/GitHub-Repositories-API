@@ -4,7 +4,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import com.mkan.controller.dto.OwnerDTO;
 import com.mkan.controller.dto.OwnerRepoBranchesDTO;
-import com.mkan.business.model.Repo;
+import com.mkan.model.Repo;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;

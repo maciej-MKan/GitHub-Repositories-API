@@ -1,4 +1,4 @@
-package com.mkan.business.model;
+package com.mkan.model;
 
 import java.util.List;
 

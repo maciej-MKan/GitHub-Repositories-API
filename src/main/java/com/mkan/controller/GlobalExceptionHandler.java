@@ -1,7 +1,7 @@
 package com.mkan.controller;
 
 import com.mkan.controller.dto.ExceptionMessage;
-import com.mkan.business.exception.UserNotFoundException;
+import com.mkan.exception.UserNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;

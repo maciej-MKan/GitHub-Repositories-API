@@ -2,11 +2,10 @@ package com.mkan.controller.rest;
 
 import com.mkan.controller.dto.OwnerDTO;
 import com.mkan.controller.dto.OwnerRepoBranchesDTO;
-import com.mkan.business.GHService;
+import com.mkan.service.GHService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

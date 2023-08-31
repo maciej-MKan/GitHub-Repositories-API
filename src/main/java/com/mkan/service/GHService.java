@@ -1,10 +1,10 @@
-package com.mkan.business;
+package com.mkan.service;
 
 import com.mkan.controller.dto.OwnerDTO;
 import com.mkan.controller.dto.OwnerRepoBranchesDTO;
-import com.mkan.business.exception.UserNotFoundException;
-import com.mkan.business.model.Branch;
-import com.mkan.business.model.Repo;
+import com.mkan.exception.UserNotFoundException;
+import com.mkan.model.Branch;
+import com.mkan.model.Repo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;

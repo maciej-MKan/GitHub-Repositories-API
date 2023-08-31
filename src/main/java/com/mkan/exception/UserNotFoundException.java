@@ -1,4 +1,4 @@
-package com.mkan.business.exception;
+package com.mkan.exception;
 
 public class UserNotFoundException extends RuntimeException {
 

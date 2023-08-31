@@ -1,6 +1,6 @@
 package com.mkan.controller.dto;
 
-import com.mkan.business.model.Repo;
+import com.mkan.model.Repo;
 
 import java.util.List;
 

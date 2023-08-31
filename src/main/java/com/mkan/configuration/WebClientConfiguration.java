@@ -1,4 +1,4 @@
-package com.mkan.business.configuration;
+package com.mkan.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.ChannelOption;
