@@ -14,12 +14,13 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+import static com.mkan.controller.dto.mapper.RepoBranchesMapper.map;
+
 @Slf4j
 @Service
 public class GHService {
 
     private final WebClient.Builder webClientbuilder;
-
     public GHService(WebClient.Builder webClientbuilder) {
         this.webClientbuilder = webClientbuilder;
     }
@@ -45,7 +46,8 @@ public class GHService {
                 .collectList()
                 .block();
 
-        return new OwnerRepoBranchesDTO(ownerDTO.login(), repositories);
+        assert repositories != null;
+        return map(ownerDTO, repositories);
     }
 
     private Mono<List<Branch>> getBranches(String ownerLogin, String repoName) {

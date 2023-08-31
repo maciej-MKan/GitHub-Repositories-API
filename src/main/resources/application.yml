@@ -6,3 +6,4 @@ server:
 api:
   GitHub:
     url: https://api.github.com/
+
