@@ -12,8 +12,6 @@ extra["springCloudVersion"] = "2022.0.4"
 extra["wiremockVersion"] = "2.27.2"
 extra["restAssuredVersion"] = "5.3.0"
 extra["wiremockSlf4jVersion"] = "2.0.5"
-extra["mapstructVersion"] = "1.5.3.Final"
-extra["lombokMapstructBindingVersion"] = "0.2.0"
 extra["jsr305Version"] = "3.0.2"
 extra["jacocoVersion"] = "0.8.9"
 
@@ -46,9 +44,6 @@ dependencies {
     //annotationProcesor
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
-    implementation("org.mapstruct:mapstruct:${property("mapstructVersion")}")
-    annotationProcessor("org.mapstruct:mapstruct-processor:${property("mapstructVersion")}")
-    annotationProcessor("org.projectlombok:lombok-mapstruct-binding:${property("lombokMapstructBindingVersion")}")
 
     // warning: unknown enum constant When.MAYBE
     // reason: class file for javax.annotation.meta.When not found
